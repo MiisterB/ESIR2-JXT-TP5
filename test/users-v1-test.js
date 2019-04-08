@@ -6,6 +6,34 @@ chai.should()
 chai.use(chaiHttp)
 
 describe('Users tests', () => {
+  it('The login API put credentials and get JWT access token if access is granted', done => {
+    chai
+      .request(app)
+      .get('/v1/auth/login')
+      .end((err, res) => {
+        res
+          .should
+          .have
+          .status(200)
+        done()
+      })
+    })
+
+
+  it('The verifyaccess API should return OK if access is granted to the user', done => {
+    chai
+      .request(app)
+      .get('/v1/auth/verifyaccess')
+      .end((err, res) => {
+        res
+          .should
+          .have
+          .status(200)
+        done()
+      })
+  })
+
+
   it('should list ALL users on /v1/users GET', done => {
     chai
       .request(app)
