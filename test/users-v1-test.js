@@ -71,7 +71,7 @@ describe('Users tests', () => {
     chai
       .request(app)
       .post('/v1/users')
-      .send({name: 'Robert', login: 'roro', age: 23})
+      .send({name: 'Robert', login: 'roro', age: 23, password: 'test-mdp'})
       .end((err, res) => {
         res
           .should
@@ -118,6 +118,16 @@ describe('Users tests', () => {
           .login
           .should
           .equal('roro')
+        res
+          .body
+          .should
+          .have
+          .property('password')
+        res
+          .body
+          .password
+          .should
+          .equal('test-mdp')
         done()
       })
   })
@@ -126,7 +136,7 @@ describe('Users tests', () => {
     chai
       .request(app)
       .post('/v1/users')
-      .send({name: 'Robert', login: 'roro', age: 23, wrongparam: 'value'})
+      .send({name: 'Robert', login: 'roro', age: 23, password: 'test-mdp', wrongparam: 'value'})
       .end((err, res) => {
         res
           .should
@@ -155,7 +165,7 @@ describe('Users tests', () => {
     chai
       .request(app)
       .patch('/v1/users/45745c60-7b1a-11e8-9c9c-2d42b21b1a3e')
-      .send({name: 'Robertinio'})
+      .send({name: 'Robertinio', password: 'test-mdp2'})
       .end((err, res) => {
         res
           .should
@@ -187,6 +197,11 @@ describe('Users tests', () => {
           .login
           .should
           .equal('pedro')
+        res
+          .body
+          .password
+          .should
+          .equal('test-mdp2')
         done()
       })
   })
