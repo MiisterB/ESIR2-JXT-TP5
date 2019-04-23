@@ -30,7 +30,7 @@
     "bcrypt": "^3.0.5",
     "express": "^4.16.4",
     "helmet": "^3.16.0",
-    "jsonwebtoken": "^8.4.0",
+    "jsonwebtoken": "^8.5.1",
     "tcomb": "^3.2.29",
     "uuid": "^3.3.2"
   }
