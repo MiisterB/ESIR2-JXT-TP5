@@ -11,7 +11,30 @@ const logger = loggerModel(usersModel);
 
 const app = express()
 
+let verifyacess = (req, res, next) => 
+{
+    let token = req.header("Authorization");
+    if (token) 
+    {
+        token = token.replace("bearer ", "");
+        logger.verifyacess(token).then((decoded) => 
+        {
+            next();
+
+        }).catch(()=> 
+        {
+        res.status(401).json({ message: "Unauthorized" });
+
+        });
+    } 
+    else 
+    {
+      res.status(401).json({ message: "Unauthorized" });
+    }
+};
+
 app.use(bodyParser.json())
+app.use(/^(?!.*v1\/auth\/login).*$/, verifyacess);
 
 // Activation de Helmet
 app.use(helmet({noSniff: true}))
