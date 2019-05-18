@@ -99,7 +99,6 @@ const remove = (id) => {
 
 function validateUser(user) {
     let result = false
-    /* istanbul ignore else */
     if (user) {
         try {
             const tcombUser = USER(user)

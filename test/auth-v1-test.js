@@ -6,11 +6,25 @@ chai.should();
 chai.use(chaiHttp);
 
 describe("Users tests", () => {
-  it("login should fail", done => {
+  it("login should fail (bad login)", done => {
     chai
       .request(app)
       .post("/v1/auth/login")
       .send({ login: "roswre", password: "azett" })
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.should.be.json;
+        res.body.should.have.property("message");
+        res.body.message.should.equal("Unauthorized");
+        done();
+      });
+  });
+
+  it("login should fail (no login)", done => {
+    chai
+      .request(app)
+      .post("/v1/auth/login")
+      .send()
       .end((err, res) => {
         res.should.have.status(401);
         res.should.be.json;
@@ -32,30 +46,9 @@ describe("Users tests", () => {
         res.body.message.should.equal("Ok");
         res.body.should.have.property("access_token");
         done();
-        //TODO check experity
       });
   });
 
-  it("check access sucessfully", done => {
-    chai
-      .request(app)
-      .post("/v1/auth/login")
-      .send({ login: "rose", password: "JXT" })
-      .end((err, res) => {
-        const token = res.body.access_token;
-        chai
-          .request(app)
-          .get("/v1/auth/verifyaccess")
-          .set("Authorization", `bearer ${token}`)
-          .end((error, response) => {
-            response.should.have.status(200);
-            response.body.should.have.property("message");
-            response.body.message.should.equal("Ok");
-            done();
-          });
-        //TODO check experity
-      });
-  });
   it("check access fail", done => {
     chai
       .request(app)
@@ -80,4 +73,25 @@ describe("Users tests", () => {
         done();
       });
   });
+
+  it("check access sucessfully", done => {
+    chai
+      .request(app)
+      .post("/v1/auth/login")
+      .send({ login: "rose", password: "JXT" })
+      .end((err, res) => {
+        const token = res.body.access_token;
+        chai
+          .request(app)
+          .get("/v1/auth/verifyaccess")
+          .set("Authorization", `bearer ${token}`)
+          .end((error, response) => {
+            response.should.have.status(200);
+            response.body.should.have.property("message");
+            response.body.message.should.equal("Ok");
+            done();
+          });
+      });
+  });
+
 });
